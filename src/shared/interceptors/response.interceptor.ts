@@ -32,7 +32,6 @@ export class ResponseInterceptor<T>
 
         return new ApiResponse(data);
       }),
-
       catchError((error) => {
         let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         let message = 'Internal server error';
@@ -50,10 +49,10 @@ export class ResponseInterceptor<T>
 
         return throwError(
           () =>
-            new ApiResponse<null>(null, {
-              code: statusCode,
-              message,
-            }),
+            new HttpException(
+              new ApiResponse<null>(null, { code: statusCode, message }),
+              statusCode,
+            ),
         );
       }),
     );
