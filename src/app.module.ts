@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { env } from 'src/shared/env/dotenv';
+import { TeacherModule } from './teacher/teacher.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { env } from 'src/shared/env/dotenv';
       synchronize: false,
       logging: env.APP_ENV === 'development',
     }),
+    TeacherModule,
   ],
   controllers: [],
   providers: [],
