@@ -1,4 +1,12 @@
-import { Body, Controller, Post, UsePipes, Get, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UsePipes,
+  Get,
+  Param,
+  NotFoundException,
+} from '@nestjs/common';
 import { TeacherService } from '../services/teacher.service';
 import {
   CreateTeacherDTO,
@@ -24,6 +32,12 @@ export class TeacherController {
   async getTeacherById(
     @Param('id', new ZodValidationPipe(teacherIdSchema)) id: number,
   ): Promise<Teacher | null> {
-    return this.teacherService.getTeacherById(id);
+    const teacher = await this.teacherService.getTeacherById(id);
+
+    if (!teacher) {
+      throw new NotFoundException('Teacher not found');
+    }
+
+    return teacher;
   }
 }
