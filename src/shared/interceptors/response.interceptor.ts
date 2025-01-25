@@ -3,9 +3,11 @@ import {
   ExecutionContext,
   Injectable,
   NestInterceptor,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { ApiResponse } from '../dtos/api-response.dto';
 
 @Injectable()
@@ -29,6 +31,30 @@ export class ResponseInterceptor<T>
         }
 
         return new ApiResponse(data);
+      }),
+
+      catchError((error) => {
+        let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
+        let message = 'Internal server error';
+
+        if (error instanceof HttpException) {
+          statusCode = error.getStatus();
+          const errorResponse = error.getResponse();
+
+          if (typeof errorResponse === 'object' && errorResponse !== null) {
+            message = (errorResponse as any).message || error.message;
+          } else {
+            message = errorResponse as string;
+          }
+        }
+
+        return throwError(
+          () =>
+            new ApiResponse<null>(null, {
+              code: statusCode,
+              message,
+            }),
+        );
       }),
     );
   }
