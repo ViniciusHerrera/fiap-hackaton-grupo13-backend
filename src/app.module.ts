@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { env } from 'src/shared/env/dotenv';
 import { TeacherModule } from './teacher/teacher.module';
 import { AuthModule } from './auth/auth.module';
+import { ResultModule } from './result/result.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     TeacherModule,
     AuthModule,
+    ResultModule,
   ],
   controllers: [],
   providers: [],
