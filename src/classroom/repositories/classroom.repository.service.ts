@@ -36,8 +36,6 @@ export class ClassroomRepositoryService implements IClassroomRepository {
   async getClassroomById(
     filter: FilterClassroomDTO,
   ): Promise<Classroom | null> {
-    console.log(filter);
-
     return await this.classroomRepository.findOne({
       where: { id: filter.id, teacher: { id: filter.teacherId } },
       relations: ['teacher'],

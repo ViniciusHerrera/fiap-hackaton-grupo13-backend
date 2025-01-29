@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  NotFoundException,
   Param,
   Post,
   Put,
@@ -19,7 +20,10 @@ import {
   UpdateClassroomDTO,
   updateClassroomSchema,
 } from '../dtos/update-classroom.dto';
-import { teacherIdBodySchema } from 'src/teacher/dtos/create-teacher.dto';
+import {
+  FilterTeacherDTO,
+  teacherIdBodySchema,
+} from 'src/teacher/dtos/create-teacher.dto';
 
 @Controller('classe')
 export class ClassroomController {
@@ -34,16 +38,21 @@ export class ClassroomController {
   }
 
   @Get(':id')
-  @UsePipes(new ZodValidationPipe(teacherIdBodySchema))
   async getClassroomById(
     @Param('id', new ZodValidationPipe(classroomIdSchema)) id: number,
-    @Body() teacher_id: number,
+    @Body(new ZodValidationPipe(teacherIdBodySchema))
+    filterTeacherDTO: FilterTeacherDTO,
   ): Promise<Classroom | null> {
-    console.log(id, teacher_id);
-    return this.classroomService.getClassroomById({
+    const classroom = await this.classroomService.getClassroomById({
       id,
-      teacherId: teacher_id,
+      teacherId: filterTeacherDTO.teacher_id,
     });
+
+    if (!classroom) {
+      throw new NotFoundException('Classroom not found');
+    }
+
+    return classroom;
   }
 
   @Get()
@@ -51,15 +60,31 @@ export class ClassroomController {
   async getClassroomByTeacherId(
     @Body() teacher_id: number,
   ): Promise<Classroom[] | null> {
-    return this.classroomService.getClassroomByTeacherId(teacher_id);
+    const classrooms =
+      await this.classroomService.getClassroomByTeacherId(teacher_id);
+
+    if (!classrooms || classrooms.length === 0) {
+      throw new NotFoundException('Classrooms not found');
+    }
+
+    return classrooms;
   }
 
   @Put(':id')
-  @UsePipes(new ZodValidationPipe(updateClassroomSchema))
   async updateClassroom(
     @Param('id', new ZodValidationPipe(classroomIdSchema)) id: number,
-    @Body() updateClassroomDTO: UpdateClassroomDTO,
+    @Body(new ZodValidationPipe(updateClassroomSchema))
+    updateClassroomDTO: UpdateClassroomDTO,
   ): Promise<Classroom | null> {
-    return this.classroomService.updateClassroom(id, updateClassroomDTO);
+    const updatedClassroom = await this.classroomService.updateClassroom(
+      id,
+      updateClassroomDTO,
+    );
+
+    if (!updatedClassroom) {
+      throw new NotFoundException('Classroom not found');
+    }
+
+    return updatedClassroom;
   }
 }
