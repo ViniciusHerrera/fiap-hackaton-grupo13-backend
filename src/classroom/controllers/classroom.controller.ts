@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UsePipes,
 } from '@nestjs/common';
 import { ClassroomService } from '../services/classroom.service';
@@ -24,6 +25,10 @@ import {
   FilterTeacherDTO,
   teacherIdBodySchema,
 } from 'src/teacher/dtos/create-teacher.dto';
+import {
+  IPaginationParams,
+  paginationSchema,
+} from 'src/shared/dtos/pagination.dto';
 
 @Controller('classe')
 export class ClassroomController {
@@ -56,18 +61,31 @@ export class ClassroomController {
   }
 
   @Get()
-  @UsePipes(new ZodValidationPipe(teacherIdBodySchema))
   async getClassroomByTeacherId(
-    @Body() teacher_id: number,
-  ): Promise<Classroom[] | null> {
-    const classrooms =
-      await this.classroomService.getClassroomByTeacherId(teacher_id);
+    @Body(new ZodValidationPipe(teacherIdBodySchema))
+    filterTeacherDTO: FilterTeacherDTO,
+    @Query(new ZodValidationPipe(paginationSchema))
+    paginationParams: IPaginationParams,
+  ): Promise<{
+    items: Classroom[];
+    totalPages: number;
+    page: number;
+    limit: number;
+  }> {
+    const { teacher_id } = filterTeacherDTO;
+    const { page, limit } = paginationParams;
 
-    if (!classrooms || classrooms.length === 0) {
+    const result = await this.classroomService.getClassroomByTeacherId(
+      teacher_id,
+      page,
+      limit,
+    );
+
+    if (!result.items || result.items.length === 0) {
       throw new NotFoundException('Classrooms not found');
     }
 
-    return classrooms;
+    return result;
   }
 
   @Put(':id')

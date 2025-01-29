@@ -3,20 +3,20 @@ export class ApiResponse<T> {
   error: { code: number; message: string } | null;
 
   total_pages?: number;
-  per_page?: number;
+  limit?: number;
   page?: number;
 
   constructor(
     data: T,
     error: { code: number; message: string } | null = null,
-    pagination?: { totalPages: number; perPage: number; page: number },
+    pagination?: { totalPages: number; limit: number; page: number },
   ) {
     this.data = data;
     this.error = error;
 
     if (pagination) {
       this.total_pages = pagination.totalPages;
-      this.per_page = pagination.perPage;
+      this.limit = pagination.limit;
       this.page = pagination.page;
     }
   }

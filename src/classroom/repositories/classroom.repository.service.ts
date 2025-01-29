@@ -44,11 +44,27 @@ export class ClassroomRepositoryService implements IClassroomRepository {
 
   async getClassroomByTeacherId(
     teacher_id: number,
-  ): Promise<Classroom[] | null> {
-    return await this.classroomRepository.find({
+    page: number,
+    limit: number,
+  ): Promise<{
+    items: Classroom[];
+    totalPages: number;
+    page: number;
+    limit: number;
+  }> {
+    const [items, total] = await this.classroomRepository.findAndCount({
       where: { teacher: { id: teacher_id } },
       relations: ['teacher'],
+      take: limit,
+      skip: (page - 1) * limit,
     });
+
+    return {
+      items,
+      totalPages: Math.ceil(total / limit),
+      page,
+      limit,
+    };
   }
 
   async updateClassroom(

@@ -20,12 +20,12 @@ export class ResponseInterceptor<T>
   ): Observable<ApiResponse<T>> {
     return next.handle().pipe(
       map((data) => {
-        const isPaginated = data?.totalPages && data?.perPage && data?.page;
+        const isPaginated = data?.totalPages && data?.limit && data?.page;
 
         if (isPaginated) {
           return new ApiResponse(data.items, null, {
             totalPages: data.totalPages,
-            perPage: data.perPage,
+            limit: data.limit,
             page: data.page,
           });
         }

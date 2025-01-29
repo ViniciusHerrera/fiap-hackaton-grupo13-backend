@@ -24,8 +24,14 @@ export class ClassroomService {
 
   async getClassroomByTeacherId(
     teacher_id: number,
-  ): Promise<Classroom[] | null> {
-    return this.classroomRepository.getClassroomByTeacherId(teacher_id);
+    page: number,
+    limit: number,
+  ) {
+    return this.classroomRepository.getClassroomByTeacherId(
+      teacher_id,
+      page,
+      limit,
+    );
   }
 
   async updateClassroom(
