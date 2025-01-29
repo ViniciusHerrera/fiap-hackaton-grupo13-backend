@@ -16,5 +16,6 @@ import { TEACHER_REPOSITORY } from './repositories/interfaces/teacher.repository
       useClass: TeacherRepositoryService,
     },
   ],
+  exports: [TeacherService, TEACHER_REPOSITORY],
 })
 export class TeacherModule {}

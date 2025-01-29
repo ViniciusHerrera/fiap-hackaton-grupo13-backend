@@ -9,4 +9,8 @@ export const createTeacherSchema = z
 
 export const teacherIdSchema = z.coerce.number();
 
+export const teacherIdBodySchema = z.object({
+  teacher_id: teacherIdSchema,
+});
+
 export type CreateTeacherDTO = z.infer<typeof createTeacherSchema>;
