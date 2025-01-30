@@ -25,10 +25,11 @@ import {
   FilterTeacherDTO,
   teacherIdBodySchema,
 } from 'src/teacher/dtos/create-teacher.dto';
+import {} from 'src/shared/dtos/pagination.dto';
 import {
-  IPaginationParams,
-  paginationSchema,
-} from 'src/shared/dtos/pagination.dto';
+  getClassroomByTeacherIdSchema,
+  IGetClassroomByTeacherIdSchema,
+} from '../dtos/get-classroom-by-teacher-id.dto';
 
 @Controller('classe')
 export class ClassroomController {
@@ -62,28 +63,21 @@ export class ClassroomController {
 
   @Get()
   async getClassroomByTeacherId(
-    @Body(new ZodValidationPipe(teacherIdBodySchema))
-    filterTeacherDTO: FilterTeacherDTO,
-    @Query(new ZodValidationPipe(paginationSchema))
-    paginationParams: IPaginationParams,
+    @Query(new ZodValidationPipe(getClassroomByTeacherIdSchema))
+    paginationParams: IGetClassroomByTeacherIdSchema,
   ): Promise<{
     items: Classroom[];
     totalPages: number;
     page: number;
     limit: number;
   }> {
-    const { teacher_id } = filterTeacherDTO;
-    const { page, limit } = paginationParams;
+    const { page, limit, teacher_id } = paginationParams;
 
     const result = await this.classroomService.getClassroomByTeacherId(
       teacher_id,
       page,
       limit,
     );
-
-    if (!result.items || result.items.length === 0) {
-      throw new NotFoundException('Classrooms not found');
-    }
 
     return result;
   }
