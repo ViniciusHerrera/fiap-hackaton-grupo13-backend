@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { env } from 'src/shared/env/dotenv';
 import { TeacherModule } from './teacher/teacher.module';
 import { AuthModule } from './auth/auth.module';
+import { ExamsModule } from './exams/exams.module';
 import { EnrollmentModule } from './enrollment/enrollment.module';
 import { ClassroomModule } from './classroom/classroom.module';
 
@@ -28,6 +29,7 @@ import { ClassroomModule } from './classroom/classroom.module';
     }),
     TeacherModule,
     AuthModule,
+    ExamsModule,
     EnrollmentModule,
     ClassroomModule,
   ],
