@@ -1,5 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { IExams } from './models/exams.interface';
+import { Classroom } from 'src/classroom/entities/classroom.entity';
 
 @Entity({ name: 'exams' })
 export class Exams implements IExams {
@@ -10,9 +17,9 @@ export class Exams implements IExams {
   date: Date;
 
   @Column()
-  answaerable: string;
+  answerable: boolean;
 
-  //   @ManyToOne(() => Classroom)
-  //   @JoinColumn({ name: 'classroom_id' })
-  //   classroom: Classroom;
+  @ManyToOne(() => Classroom)
+  @JoinColumn({ name: 'classroom_id' })
+  classroomId: Classroom;
 }

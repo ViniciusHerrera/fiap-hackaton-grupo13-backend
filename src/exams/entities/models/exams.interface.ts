@@ -1,6 +1,8 @@
+import { Classroom } from 'src/classroom/entities/classroom.entity';
+
 export interface IExams {
   id?: number;
   date: Date;
-  answaerable: string;
-  //   classroomId: Classroom;
+  answerable: boolean;
+  classroomId: Classroom;
 }

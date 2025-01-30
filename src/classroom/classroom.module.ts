@@ -17,5 +17,6 @@ import { TeacherModule } from 'src/teacher/teacher.module';
       useClass: ClassroomRepositoryService,
     },
   ],
+  exports: [ClassroomService, CLASSROOM_REPOSITORY],
 })
 export class ClassroomModule {}
