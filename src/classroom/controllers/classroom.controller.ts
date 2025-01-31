@@ -46,7 +46,7 @@ export class ClassroomController {
   @Get(':id')
   async getClassroomById(
     @Param('id', new ZodValidationPipe(classroomIdSchema)) id: number,
-    @Body(new ZodValidationPipe(teacherIdBodySchema))
+    @Query(new ZodValidationPipe(teacherIdBodySchema))
     filterTeacherDTO: FilterTeacherDTO,
   ): Promise<Classroom | null> {
     const classroom = await this.classroomService.getClassroomById({
