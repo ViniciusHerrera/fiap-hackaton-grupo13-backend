@@ -9,6 +9,7 @@ import { QuestionsModule } from './questions/questions.module';
 import { ExamsModule } from './exams/exams.module';
 import { EnrollmentModule } from './enrollment/enrollment.module';
 import { ClassroomModule } from './classroom/classroom.module';
+import { StudentModule } from './student/student.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { ClassroomModule } from './classroom/classroom.module';
     EnrollmentModule,
     ClassroomModule,
     QuestionsModule,
+    StudentModule,
   ],
   controllers: [],
   providers: [],
