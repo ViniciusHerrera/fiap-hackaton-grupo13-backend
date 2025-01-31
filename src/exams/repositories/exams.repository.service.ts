@@ -14,9 +14,11 @@ export class ExamsRepositoryService implements IExamsRepository {
     private readonly classroomService: ClassroomService,
   ) {}
 
+  async getExamById(id: number): Promise<Exams | null> {
+    return this.examsRepository.findOne({ where: { id } });
+  }
+
   async createExams(exams: CreateExamsDTO): Promise<Exams> {
-    console.log(exams.classroom_id);
-    console.log(exams.teacher_id);
     const classroom = await this.classroomService.getClassroomById({
       id: exams.classroom_id,
       teacherId: exams.teacher_id,
@@ -28,9 +30,35 @@ export class ExamsRepositoryService implements IExamsRepository {
 
     const newExam = this.examsRepository.create({
       ...exams,
-      classroomId: classroom,
+      classroom: classroom,
     });
 
     return this.examsRepository.save(newExam);
+  }
+
+  async getExamsByClassroomId(
+    classroom_id: number,
+    page: number,
+    limit: number,
+  ): Promise<{
+    items: Exams[];
+    totalPages: number;
+    page: number;
+    limit: number;
+  }> {
+    const [items, total] = await this.examsRepository.findAndCount({
+      where: { classroom: { id: classroom_id } },
+      relations: ['classroom'],
+      take: limit,
+      skip: (page - 1) * limit,
+    });
+    console.log('items', items);
+
+    return {
+      items,
+      totalPages: Math.ceil(total / limit),
+      page,
+      limit,
+    };
   }
 }

@@ -14,4 +14,20 @@ export class ExamsService {
   async createExams(exams: CreateExamsDTO): Promise<Exams> {
     return this.examsRepository.createExams(exams);
   }
+
+  async getExamById(id: number): Promise<Exams | null> {
+    return this.examsRepository.getExamById(id);
+  }
+
+  async getExamsByClassroomId(
+    classroom_id: number,
+    page: number,
+    limit: number,
+  ) {
+    return this.examsRepository.getExamsByClassroomId(
+      classroom_id,
+      page,
+      limit,
+    );
+  }
 }

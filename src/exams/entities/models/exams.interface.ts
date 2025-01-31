@@ -4,5 +4,5 @@ export interface IExams {
   id?: number;
   date: Date;
   answerable: boolean;
-  classroomId: Classroom;
+  classroom: Classroom;
 }

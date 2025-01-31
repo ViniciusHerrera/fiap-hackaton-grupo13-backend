@@ -5,4 +5,15 @@ export const EXAMS_REPOSITORY = 'EXAMS_REPOSITORY';
 
 export interface IExamsRepository {
   createExams(exams: CreateExamsDTO): Promise<Exams>;
+  getExamById(id: number): Promise<Exams | null>;
+  getExamsByClassroomId(
+    classroom_id: number,
+    page: number,
+    perPage: number,
+  ): Promise<{
+    items: Exams[];
+    totalPages: number;
+    page: number;
+    limit: number;
+  }>;
 }

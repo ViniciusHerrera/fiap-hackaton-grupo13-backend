@@ -21,5 +21,5 @@ export class Exams implements IExams {
 
   @ManyToOne(() => Classroom)
   @JoinColumn({ name: 'classroom_id' })
-  classroomId: Classroom;
+  classroom: Classroom;
 }
