@@ -11,6 +11,7 @@ import { CreateEnrollmentDTO } from '../dtos/create-enrollment';
 import { TeacherService } from 'src/teacher/services/teacher.service';
 import { StudentService } from 'src/student/services/student.service';
 import { ClassroomService } from 'src/classroom/services/classroom.service';
+import { Student } from 'src/student/entities/student.entity';
 
 @Injectable()
 export class EnrollmentRepositoryService implements IEnrollmentRepository {
@@ -52,5 +53,31 @@ export class EnrollmentRepositoryService implements IEnrollmentRepository {
     });
 
     return this.enrollmentRepository.save(newEnrollment);
+  }
+
+  async getStudentsByClassroomId(
+    classroomId: number,
+    teacherId: number,
+    page: number,
+    limit: number,
+  ): Promise<{
+    items: Student[];
+    totalPages: number;
+    page: number;
+    limit: number;
+  }> {
+    const [items, total] = await this.enrollmentRepository.findAndCount({
+      where: { classroom: { id: classroomId, teacher: { id: teacherId } } },
+      relations: ['student'],
+      take: limit,
+      skip: (page - 1) * limit,
+    });
+
+    return {
+      items: items.map((enrollment) => enrollment.student),
+      totalPages: Math.ceil(total / limit),
+      page,
+      limit,
+    };
   }
 }

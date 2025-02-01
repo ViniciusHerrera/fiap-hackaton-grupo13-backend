@@ -10,4 +10,6 @@ export const createEnrollmentSchema = z
   })
   .required();
 
+export const enrollmentIdSchema = z.coerce.number();
+
 export type CreateEnrollmentDTO = z.infer<typeof createEnrollmentSchema>;
