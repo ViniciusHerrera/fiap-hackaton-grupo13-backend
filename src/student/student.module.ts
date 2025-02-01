@@ -16,5 +16,6 @@ import { STUDENT_REPOSITORY } from './repositories/interfaces/student.repository
       useClass: StudentRepositoryService,
     },
   ],
+  exports: [StudentService, STUDENT_REPOSITORY],
 })
 export class StudentModule {}
