@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Logger,
   NotFoundException,
   Param,
   Post,
@@ -15,9 +16,14 @@ import {
   studentIdSchema,
 } from '../dtos/create-student.dto';
 import { Student } from '../entities/student.entity';
+import {
+  StudentResponseDto,
+  StudentResponseSchema,
+} from '../dtos/student-response.dto';
 
 @Controller('student')
 export class StudentController {
+  private readonly logger = new Logger(StudentController.name);
   constructor(private readonly studentService: StudentService) {}
 
   @Post()
@@ -26,6 +32,13 @@ export class StudentController {
     @Body() createStudentDTO: CreateStudentDTO,
   ): Promise<Student> {
     return this.studentService.createStudent(createStudentDTO);
+  }
+
+  @Get('answered-exam')
+  async getStudentsWhoAnsweredExam(): Promise<StudentResponseDto[]> {
+    const students = await this.studentService.getStudentsWhoAnsweredExam();
+
+    return students.map((student) => StudentResponseSchema.parse(student));
   }
 
   @Get(':id')

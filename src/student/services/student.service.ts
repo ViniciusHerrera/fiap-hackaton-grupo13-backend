@@ -3,6 +3,7 @@ import { STUDENT_REPOSITORY } from '../repositories/interfaces/student.repositor
 import { StudentRepositoryService } from '../repositories/student.repository.service';
 import { CreateStudentDTO } from '../dtos/create-student.dto';
 import { Student } from '../entities/student.entity';
+import { StudentResponseDto } from '../dtos/student-response.dto';
 
 @Injectable()
 export class StudentService {
@@ -17,5 +18,9 @@ export class StudentService {
 
   async getStudentById(id: number): Promise<Student | null> {
     return this.studentRepository.getStudentById(id);
+  }
+
+  async getStudentsWhoAnsweredExam(): Promise<StudentResponseDto[]> {
+    return await this.studentRepository.findStudentsWhoAnsweredExam();
   }
 }

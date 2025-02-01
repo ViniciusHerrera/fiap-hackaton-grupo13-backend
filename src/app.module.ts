@@ -26,9 +26,9 @@ import { StudentModule } from './student/student.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: false,
       logging: env.APP_ENV === 'development',
-      // ssl: {
-      //   rejectUnauthorized: false,
-      // },
+      ssl: {
+        rejectUnauthorized: false,
+      },
     }),
     TeacherModule,
     AuthModule,
