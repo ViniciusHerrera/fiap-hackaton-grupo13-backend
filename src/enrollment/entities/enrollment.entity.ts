@@ -1,8 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { IEnrollment } from './models/enrollment.interface';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Student } from 'src/student/entities/student.entity';
+import { Classroom } from 'src/classroom/entities/classroom.entity';
 
 @Entity({ name: 'enrollment' })
-export class Enrollment implements IEnrollment {
+export class Enrollment {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -12,11 +19,11 @@ export class Enrollment implements IEnrollment {
   @Column({ name: 'end_date' })
   endDate: Date;
 
-  //   @ManyToOne(() => Student)
-  //   @JoinColumn({ name: 'student_id' })
-  //   student: Student;
+  @ManyToOne(() => Student)
+  @JoinColumn({ name: 'student_id' })
+  student: Student;
 
-  //   @ManyToOne(() => Classroom)
-  //   @JoinColumn({ name: 'classroom_id' })
-  //   classroom: Classroom;
+  @ManyToOne(() => Classroom)
+  @JoinColumn({ name: 'classroom_id' })
+  classroom: Classroom;
 }
