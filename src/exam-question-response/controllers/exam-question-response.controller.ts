@@ -46,4 +46,15 @@ export class ExamQuestionsResponseController {
   async delete(@Param('id') id: string) {
     return this.examQuestionResponseService.delete(Number(id));
   }
+
+  @Get(':exam_id/student/:student_id')
+  async getResponses(
+    @Param('exam_id') examId: string,
+    @Param('student_id') studentId: string,
+  ) {
+    return this.examQuestionResponseService.getResponsesForExam(
+      Number(examId),
+      Number(studentId),
+    );
+  }
 }

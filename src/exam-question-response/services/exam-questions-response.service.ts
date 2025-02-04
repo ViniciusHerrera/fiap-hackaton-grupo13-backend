@@ -24,11 +24,15 @@ export class ExamQuestionResponseService {
     private readonly examQuestionRepository: Repository<ExamQuestion>,
   ) {}
 
+  async getResponsesForExam(examId: number, studentId: number) {
+    return this.examQuestionResponseRepository.findResponsesByExamAndStudent(
+      examId,
+      studentId,
+    );
+  }
+
   async create(data: CreateExamQuestionResponseDto) {
     try {
-      console.log('Recebendo request para criar resposta de exame:', data);
-
-      // 1. Buscar estudante
       const student = await this.studentRepository.findOne({
         where: { id: data.student_id },
       });
@@ -39,7 +43,6 @@ export class ExamQuestionResponseService {
         );
       }
 
-      // 2. Buscar matrícula do estudante
       const enrollment = await this.enrollmentRepository.findOne({
         where: { student: { id: student.id } },
         relations: ['student', 'classroom'],
@@ -51,7 +54,6 @@ export class ExamQuestionResponseService {
         );
       }
 
-      // 3. Buscar questão do exame
       const examQuestion = await this.examQuestionRepository.findOne({
         where: { id: data.exam_question_id },
       });
@@ -62,17 +64,12 @@ export class ExamQuestionResponseService {
         );
       }
 
-      console.log('Criando resposta para a questão:', examQuestion);
-      console.log('Usando a matrícula:', enrollment);
-
-      // 4. Criar a resposta da questão
       const responseEntity = this.examQuestionResponseRepository.create({
         response: data.response,
-        exam_question_id: examQuestion, // Certifica que o relacionamento está correto
+        exam_question_id: examQuestion,
         enrollment: enrollment,
       });
 
-      console.log('Resposta de exame criada com sucesso:', responseEntity);
       return responseEntity;
     } catch (error) {
       console.error('Erro ao criar resposta de exame:', error);

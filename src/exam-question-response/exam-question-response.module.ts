@@ -8,6 +8,7 @@ import { ExamQuestionResponseService } from './services/exam-questions-response.
 import { ExamQuestion } from 'src/exam-question/entities/exam-question.entity';
 import { EXAM_QUESTIONS_RESPONSE_REPOSITORY } from './repositories/interfaces/exam-question-response.repository.interface';
 import { ExamQuestionResponse } from './entities/exam-question-response.entity';
+import { Exams } from 'src/exams/entities/exams.entity';
 
 @Module({
   imports: [
@@ -16,8 +17,9 @@ import { ExamQuestionResponse } from './entities/exam-question-response.entity';
       Enrollment,
       Student,
       ExamQuestion,
+      Exams,
     ]),
-  ], // ✅ Garante que a entidade está carregada
+  ],
   controllers: [ExamQuestionsResponseController],
   providers: [
     ExamQuestionResponseService,

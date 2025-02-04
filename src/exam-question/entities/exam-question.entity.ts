@@ -1,9 +1,11 @@
+import { ExamQuestionResponse } from 'src/exam-question-response/entities/exam-question-response.entity';
 import { Exams } from 'src/exams/entities/exams.entity';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -18,7 +20,13 @@ export class ExamQuestion {
   @Column()
   type: string;
 
-  @ManyToOne(() => Exams)
+  @ManyToOne(() => Exams, (exam) => exam.exam_questions)
   @JoinColumn({ name: 'exam_id' })
   exam: Exams;
+
+  @OneToMany(
+    () => ExamQuestionResponse,
+    (response) => response.exam_question_id,
+  )
+  responses: ExamQuestionResponse[];
 }
