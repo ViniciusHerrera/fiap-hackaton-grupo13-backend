@@ -6,6 +6,7 @@ import {
   NotFoundException,
   Param,
   Post,
+  Query,
   UsePipes,
 } from '@nestjs/common';
 import { StudentService } from '../services/student.service';
@@ -16,10 +17,11 @@ import {
   studentIdSchema,
 } from '../dtos/create-student.dto';
 import { Student } from '../entities/student.entity';
+import { StudentResponseDto } from '../dtos/student-response.dto';
 import {
-  StudentResponseDto,
-  StudentResponseSchema,
-} from '../dtos/student-response.dto';
+  GetStudentsWhoAnsweredExamDTO,
+  getStudentsWhoAnsweredExamSchema,
+} from '../dtos/get-students-who-answered-exam.dto';
 
 @Controller('student')
 export class StudentController {
@@ -35,10 +37,20 @@ export class StudentController {
   }
 
   @Get('answered-exam')
-  async getStudentsWhoAnsweredExam(): Promise<StudentResponseDto[]> {
-    const students = await this.studentService.getStudentsWhoAnsweredExam();
+  async getStudentsWhoAnsweredExam(
+    @Query(new ZodValidationPipe(getStudentsWhoAnsweredExamSchema))
+    examId: GetStudentsWhoAnsweredExamDTO,
+  ): Promise<StudentResponseDto[]> {
+    const { exam_id } = examId;
+    try {
+      const students =
+        await this.studentService.getStudentsWhoAnsweredExam(exam_id);
+      console.log(students);
 
-    return students.map((student) => StudentResponseSchema.parse(student));
+      return students;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   @Get(':id')

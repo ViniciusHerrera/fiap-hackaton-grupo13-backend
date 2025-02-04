@@ -20,7 +20,9 @@ export class StudentService {
     return this.studentRepository.getStudentById(id);
   }
 
-  async getStudentsWhoAnsweredExam(): Promise<StudentResponseDto[]> {
-    return await this.studentRepository.findStudentsWhoAnsweredExam();
+  async getStudentsWhoAnsweredExam(
+    examId: number,
+  ): Promise<StudentResponseDto[]> {
+    return await this.studentRepository.findStudentsWhoAnsweredExam(examId);
   }
 }

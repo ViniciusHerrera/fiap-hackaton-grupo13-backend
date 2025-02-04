@@ -7,5 +7,5 @@ export const STUDENT_REPOSITORY = 'STUDENT_REPOSITORY';
 export interface IStudentRepository {
   createStudent(student: CreateStudentDTO): Promise<Student>;
   getStudentById(id: number): Promise<Student | null>;
-  findStudentsWhoAnsweredExam(): Promise<StudentResponseDto[]>;
+  findStudentsWhoAnsweredExam(examId: number): Promise<StudentResponseDto[]>;
 }
