@@ -4,12 +4,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { env } from 'src/shared/env/dotenv';
 import { TeacherModule } from './teacher/teacher.module';
 import { AuthModule } from './auth/auth.module';
-import { ResultModule } from './result/result.module';
-import { QuestionsModule } from './questions/questions.module';
 import { ExamsModule } from './exams/exams.module';
 import { EnrollmentModule } from './enrollment/enrollment.module';
 import { ClassroomModule } from './classroom/classroom.module';
 import { StudentModule } from './student/student.module';
+import { ExamResultModule } from './exam-result/exam-result.module';
+import { ExamQuestionResponseModule } from './exam-question-response/exam-question-response.module';
+import { ExamQuestionModule } from './exam-question/exam-question.module';
 
 @Module({
   imports: [
@@ -32,12 +33,13 @@ import { StudentModule } from './student/student.module';
     }),
     TeacherModule,
     AuthModule,
-    ResultModule,
     ExamsModule,
     EnrollmentModule,
     ClassroomModule,
-    QuestionsModule,
     StudentModule,
+    ExamResultModule,
+    ExamQuestionModule,
+    ExamQuestionResponseModule,
   ],
   controllers: [],
   providers: [],
