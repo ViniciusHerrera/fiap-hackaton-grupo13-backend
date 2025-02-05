@@ -73,7 +73,6 @@ export class ExamsRepositoryService implements IExamsRepository {
   async createWithQuestions(createExamDto: CreateExamDtoType): Promise<Exams> {
     const { date, classroom_id, answerable } = createExamDto;
 
-    // Verifica se a sala de aula existe
     const classroom = await this.classroomRepository.findOne({
       where: { id: classroom_id },
     });
@@ -82,7 +81,6 @@ export class ExamsRepositoryService implements IExamsRepository {
       throw new Error('Classroom not found');
     }
 
-    // Criar exame
     const exam = this.examsRepository.create({
       date,
       answerable,
@@ -91,7 +89,6 @@ export class ExamsRepositoryService implements IExamsRepository {
 
     const savedExam = await this.examsRepository.save(exam);
 
-    // Lista de perguntas padrão
     const defaultQuestions = [
       'Escreve e reconhece o nome?',
       'Reconhece letras do alfabeto?',
@@ -101,14 +98,12 @@ export class ExamsRepositoryService implements IExamsRepository {
       'Desenha esquema corporal?',
     ];
 
-    // Criar perguntas sem IDs manualmente
     const examQuestions = defaultQuestions.map((text) => ({
       text,
       type: 'objective',
       exam: savedExam,
     }));
 
-    // Inserir perguntas diretamente para evitar conflitos de ID
     await this.examQuestionRepository.insert(examQuestions);
 
     return this.examsRepository.findOne({
