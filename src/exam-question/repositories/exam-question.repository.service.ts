@@ -10,4 +10,11 @@ export class ExamQuestionRepositoryService implements IExamQuestionRepository {
     @InjectRepository(ExamQuestion)
     private readonly examQuestionRepository: Repository<ExamQuestion>,
   ) {}
+
+  async findByExamId(examId: number): Promise<ExamQuestion[]> {
+    return this.examQuestionRepository.find({
+      where: { exam: { id: examId } },
+      relations: ['responses'],
+    });
+  }
 }
