@@ -10,3 +10,11 @@ export const createExamsSchema = z
   .required();
 
 export type CreateExamsDTO = z.infer<typeof createExamsSchema>;
+
+export const CreateExamDto = z.object({
+  date: z.string(),
+  classroom_id: z.number(),
+  answerable: z.boolean().optional().default(true),
+});
+
+export type CreateExamDtoType = z.infer<typeof CreateExamDto>;

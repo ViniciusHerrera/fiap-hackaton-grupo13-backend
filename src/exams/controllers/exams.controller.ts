@@ -10,7 +10,11 @@ import {
 } from '@nestjs/common';
 import { ExamsService } from '../services/exams.service';
 import { ZodValidationPipe } from 'src/shared/pipe/zod-validation-pipe';
-import { CreateExamsDTO, createExamsSchema } from '../dtos/create-exams.dto';
+import {
+  CreateExamDto,
+  CreateExamsDTO,
+  createExamsSchema,
+} from '../dtos/create-exams.dto';
 import { Exams } from '../entities/exams.entity';
 import {
   getExamsByClassroomIdSchema,
@@ -21,6 +25,12 @@ import { examsIdSchema } from '../dtos/filter-exams.dto';
 @Controller('exams')
 export class ExamsController {
   constructor(private readonly examsService: ExamsService) {}
+
+  @Post('/create-with-questions')
+  async create(@Body() body: any) {
+    const parsedBody = CreateExamDto.parse(body);
+    return this.examsService.createWithQuestions(parsedBody);
+  }
 
   @Post()
   @UsePipes(new ZodValidationPipe(createExamsSchema))
